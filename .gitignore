@@ -1,0 +1,21 @@
+# Git repo living at $HOME: only version-control whitelisted top-level items.
+# Everything else in /root is ignored by default (dotfiles, tools, caches).
+
+# --- Allowlist (un-ignore first, then use narrow ignores below) ---
+/*
+!.gitignore
+!README.md
+!assignment2/
+!assignment2/**
+!week06/
+!week06/**
+!week09/
+!week09/**
+!week11/
+!week11/**
+!week12/
+!week12/**
+
+# --- Hidden files/dirs in /root (except .gitignore above) — never commit these ---
+/.*
+!/.gitignore

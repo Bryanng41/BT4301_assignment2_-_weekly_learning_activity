@@ -1,0 +1,61 @@
+# --- ML / experiments (large, regenerable) ---
+mlruns/
+mlartifacts/
+wandb/
+*.db
+mlflow.db
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dylib
+*.dll
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+profile_default/
+
+# --- IDE & OS ---
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Logs & local runtime (regenerable) ---
+*.log
+webapp/input_monitoring_log.csv
+webapp/production_log.csv
+
+# Optional: very large data exports (uncomment to keep repo small; reinstate
+#   if your marker requires raw CSVs in the submission)
+# data/*.csv
+
+# PyTorch / other heavy model files if ever added
+*.pt
+*.pth
+*.onnx
+*.h5
+*.hdf5
+*.npz
+*.npy
+*.pkl
+!docker/model/*.pkl

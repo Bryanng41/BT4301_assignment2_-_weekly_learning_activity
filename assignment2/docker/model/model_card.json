@@ -1,0 +1,51 @@
+{
+  "task": "purchase_classification_and_reco",
+  "primary_metric": "f1",
+  "best_experiment": "Assignment2 - Alternative Model 2",
+  "best_run_id": "802a1dcf806144a0933372b817275c02",
+  "best_f1_mlflow": 0.5944801791989478,
+  "recommender_kind": "xgb",
+  "comparison": [
+    {
+      "experiment": "Assignment2 - Baseline Model",
+      "run_id": "7871f1ff5b1447a9b96c5aa93ae77ed0",
+      "f1": 0.08208599989421907,
+      "accuracy": 0.8229171981021376,
+      "precision": 0.9002320185614849,
+      "recall": 0.04300360210584649,
+      "description": "Logistic regression (tabular)",
+      "artifact_subdir": "baseline_model"
+    },
+    {
+      "experiment": "Assignment2 - Alternative Model 1",
+      "run_id": "15cba8372deb4b9ea3834b468116e703",
+      "f1": 0.4546243686868687,
+      "accuracy": 0.5768991377990919,
+      "precision": 0.2980495628330488,
+      "recall": 0.9577722360764754,
+      "description": "Random forest (tabular)",
+      "artifact_subdir": "alternative_model_1"
+    },
+    {
+      "experiment": "Assignment2 - Alternative Model 2",
+      "run_id": "802a1dcf806144a0933372b817275c02",
+      "f1": 0.5944801791989478,
+      "accuracy": 0.7986531299423498,
+      "precision": 0.4724327149203031,
+      "recall": 0.801551676364644,
+      "description": "XGBoost (tabular)",
+      "artifact_subdir": "alternative_model_2"
+    },
+    {
+      "experiment": "Assignment2 - Alternative Model 3",
+      "run_id": "23854fcac02046aeb3c47f62ac77cfe8",
+      "f1": 0.39297723015819286,
+      "accuracy": 0.7255344115096168,
+      "precision": 0.33146794578955385,
+      "recall": 0.48251593239124413,
+      "description": "Neural collaborative filtering",
+      "artifact_subdir": "alternative_model_3"
+    }
+  ],
+  "rationale": "Production model is the experiment with the highest f1 in MLflow on the test_events table (5 negatives per user; temporal train/test split). Refit on full training data."
+}

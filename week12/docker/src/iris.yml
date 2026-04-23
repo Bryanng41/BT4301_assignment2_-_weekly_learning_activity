@@ -1,0 +1,36 @@
+swagger: "2.0"
+
+info:
+  version: "1.0.0"
+  description: "Iris Flower Decision Tree Classifier API"
+  title: "Iris Flower Decision Tree Classifier API"
+
+consumes:
+  - "application/json"
+
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+paths:
+  /iris:
+    get:
+      operationId: iris.classify
+      parameters:
+        - name: petallength
+          in: query
+          required: true
+          type: number
+        - name: petalwidth
+          in: query
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful classification"
+          schema:
+            type: object
+            properties:
+              species:
+                type: string

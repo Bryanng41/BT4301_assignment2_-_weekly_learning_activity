@@ -1,0 +1,6 @@
+ipykernel
+mysql-connector-python
+mysqlclient
+SQLAlchemy
+pandas
+matplotlib

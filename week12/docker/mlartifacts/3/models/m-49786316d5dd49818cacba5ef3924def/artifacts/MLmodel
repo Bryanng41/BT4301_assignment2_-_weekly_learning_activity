@@ -1,0 +1,98 @@
+artifact_path: mlflow-artifacts:/3/models/m-49786316d5dd49818cacba5ef3924def/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.11.1
+model_id: m-49786316d5dd49818cacba5ef3924def
+model_size_bytes: 16757
+model_uuid: m-49786316d5dd49818cacba5ef3924def
+prompts: null
+run_id: 8c12aa112bae4d49921dc49e95c35108
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "Weight", "required": true}, {"type": "long",
+    "name": "Color_Black", "required": true}, {"type": "long", "name": "Color_Blue",
+    "required": true}, {"type": "long", "name": "Color_Multi", "required": true},
+    {"type": "long", "name": "Color_Red", "required": true}, {"type": "long", "name":
+    "Color_Silver", "required": true}, {"type": "long", "name": "Color_Silver/Black",
+    "required": true}, {"type": "long", "name": "Color_Unknown", "required": true},
+    {"type": "long", "name": "Color_White", "required": true}, {"type": "long", "name":
+    "Color_Yellow", "required": true}, {"type": "long", "name": "Size_38", "required":
+    true}, {"type": "long", "name": "Size_40", "required": true}, {"type": "long",
+    "name": "Size_42", "required": true}, {"type": "long", "name": "Size_44", "required":
+    true}, {"type": "long", "name": "Size_46", "required": true}, {"type": "long",
+    "name": "Size_48", "required": true}, {"type": "long", "name": "Size_50", "required":
+    true}, {"type": "long", "name": "Size_52", "required": true}, {"type": "long",
+    "name": "Size_54", "required": true}, {"type": "long", "name": "Size_56", "required":
+    true}, {"type": "long", "name": "Size_58", "required": true}, {"type": "long",
+    "name": "Size_60", "required": true}, {"type": "long", "name": "Size_62", "required":
+    true}, {"type": "long", "name": "Size_70", "required": true}, {"type": "long",
+    "name": "Size_L", "required": true}, {"type": "long", "name": "Size_M", "required":
+    true}, {"type": "long", "name": "Size_S", "required": true}, {"type": "long",
+    "name": "Size_Unknown", "required": true}, {"type": "long", "name": "Size_XL",
+    "required": true}, {"type": "long", "name": "ProductLine_M", "required": true},
+    {"type": "long", "name": "ProductLine_R", "required": true}, {"type": "long",
+    "name": "ProductLine_S", "required": true}, {"type": "long", "name": "ProductLine_T",
+    "required": true}, {"type": "long", "name": "ProductLine_Unknown", "required":
+    true}, {"type": "long", "name": "Class_H", "required": true}, {"type": "long",
+    "name": "Class_L", "required": true}, {"type": "long", "name": "Class_M", "required":
+    true}, {"type": "long", "name": "Class_Unknown", "required": true}, {"type": "long",
+    "name": "Style_M", "required": true}, {"type": "long", "name": "Style_U", "required":
+    true}, {"type": "long", "name": "Style_Unknown", "required": true}, {"type": "long",
+    "name": "Style_W", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Bib-Shorts",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Bike Racks",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Bottles and
+    Cages", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Bottom
+    Brackets", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Brakes",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Caps", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Chains", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Cleaners", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Cranksets", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Derailleurs", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Forks", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Gloves", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Handlebars", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Headsets", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Helmets", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Hydration Packs", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Jerseys", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Locks", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Mountain Bikes", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Mountain Frames", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Pedals", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Pumps", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Road Bikes", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Road Frames", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Saddles", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Shorts", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Socks",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Tights", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Tires and Tubes", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Touring Bikes", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Touring Frames", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Vests", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Wheels", "required": true}, {"type":
+    "long", "name": "ProductCategoryName_Accessories", "required": true}, {"type":
+    "long", "name": "ProductCategoryName_Bikes", "required": true}, {"type": "long",
+    "name": "ProductCategoryName_Clothing", "required": true}, {"type": "long", "name":
+    "ProductCategoryName_Components", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-04-12 09:48:33.456941'

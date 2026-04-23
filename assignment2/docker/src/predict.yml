@@ -1,0 +1,81 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "BT4301 Assignment 2 — Purchase prediction (customer × product)"
+  description: >
+    Binary purchase prediction: for a given CustomerID and ProductID, returns P(purchase)
+    (trained tabular model), decision threshold, and predicted_purchase. Unknown products
+    return 400. Customers not seen in training are scored with default feature values;
+    cold_start_user is set when applicable.
+
+basePath: /
+
+consumes:
+  - application/json
+
+paths:
+  /api/purchase:
+    get:
+      operationId: predict.purchase
+      summary: Predict whether a customer will purchase a specific product
+      produces:
+        - application/json
+      parameters:
+        - name: customer_id
+          in: query
+          type: integer
+          format: int64
+          required: true
+          description: Warehouse CustomerID
+        - name: product_id
+          in: query
+          type: integer
+          format: int64
+          required: true
+          description: ProductID in the training catalog
+      responses:
+        200:
+          description: Pair-level prediction
+          schema:
+            type: object
+            properties:
+              customer_id:
+                type: integer
+                format: int64
+              product_id:
+                type: integer
+                format: int64
+              product_name:
+                type: string
+              kind:
+                type: string
+              score:
+                type: number
+                format: double
+                x-nullable: true
+              threshold:
+                type: number
+                format: double
+                x-nullable: true
+              predicted_purchase:
+                type: boolean
+                x-nullable: true
+              cold_start_user:
+                type: boolean
+              message:
+                type: string
+                x-nullable: true
+        400:
+          description: Bad request (e.g. unknown product)
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+        default:
+          description: Error
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string

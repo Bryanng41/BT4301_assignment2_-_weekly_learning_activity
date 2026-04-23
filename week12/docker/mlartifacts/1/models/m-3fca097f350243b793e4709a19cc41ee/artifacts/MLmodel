@@ -1,0 +1,193 @@
+artifact_path: mlflow-artifacts:/1/models/m-3fca097f350243b793e4709a19cc41ee/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.11.1
+model_id: m-3fca097f350243b793e4709a19cc41ee
+model_size_bytes: 34721
+model_uuid: m-3fca097f350243b793e4709a19cc41ee
+prompts: null
+run_id: 7017cc950eaf458884f5c910ad9d755c
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "Weight", "required": true}, {"type": "double",
+    "name": "SalesQuota", "required": true}, {"type": "double", "name": "Bonus", "required":
+    true}, {"type": "double", "name": "CommissionPct", "required": true}, {"type":
+    "double", "name": "SalesYTD", "required": true}, {"type": "double", "name": "SalesLastYear",
+    "required": true}, {"type": "long", "name": "OrderDateYear", "required": true},
+    {"type": "long", "name": "OrderDateMonth", "required": true}, {"type": "long",
+    "name": "OrderDateDayOfWeek", "required": true}, {"type": "long", "name": "OrderDateWeek",
+    "required": true}, {"type": "long", "name": "Color_Black", "required": true},
+    {"type": "long", "name": "Color_Blue", "required": true}, {"type": "long", "name":
+    "Color_Multi", "required": true}, {"type": "long", "name": "Color_Red", "required":
+    true}, {"type": "long", "name": "Color_Silver", "required": true}, {"type": "long",
+    "name": "Color_Silver/Black", "required": true}, {"type": "long", "name": "Color_Unknown",
+    "required": true}, {"type": "long", "name": "Color_White", "required": true},
+    {"type": "long", "name": "Color_Yellow", "required": true}, {"type": "long", "name":
+    "Size_38", "required": true}, {"type": "long", "name": "Size_40", "required":
+    true}, {"type": "long", "name": "Size_42", "required": true}, {"type": "long",
+    "name": "Size_44", "required": true}, {"type": "long", "name": "Size_46", "required":
+    true}, {"type": "long", "name": "Size_48", "required": true}, {"type": "long",
+    "name": "Size_50", "required": true}, {"type": "long", "name": "Size_52", "required":
+    true}, {"type": "long", "name": "Size_54", "required": true}, {"type": "long",
+    "name": "Size_56", "required": true}, {"type": "long", "name": "Size_58", "required":
+    true}, {"type": "long", "name": "Size_60", "required": true}, {"type": "long",
+    "name": "Size_62", "required": true}, {"type": "long", "name": "Size_70", "required":
+    true}, {"type": "long", "name": "Size_L", "required": true}, {"type": "long",
+    "name": "Size_M", "required": true}, {"type": "long", "name": "Size_S", "required":
+    true}, {"type": "long", "name": "Size_Unknown", "required": true}, {"type": "long",
+    "name": "Size_XL", "required": true}, {"type": "long", "name": "ProductLine_M",
+    "required": true}, {"type": "long", "name": "ProductLine_R", "required": true},
+    {"type": "long", "name": "ProductLine_S", "required": true}, {"type": "long",
+    "name": "ProductLine_T", "required": true}, {"type": "long", "name": "ProductLine_Unknown",
+    "required": true}, {"type": "long", "name": "Class_H", "required": true}, {"type":
+    "long", "name": "Class_L", "required": true}, {"type": "long", "name": "Class_M",
+    "required": true}, {"type": "long", "name": "Class_Unknown", "required": true},
+    {"type": "long", "name": "Style_M", "required": true}, {"type": "long", "name":
+    "Style_U", "required": true}, {"type": "long", "name": "Style_Unknown", "required":
+    true}, {"type": "long", "name": "Style_W", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Bib-Shorts", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Bike Racks", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Bottles and Cages", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Bottom Brackets", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Brakes", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Caps", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Chains", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Cleaners",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Cranksets",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Derailleurs",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Forks", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Gloves", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Handlebars", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Headsets", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Helmets", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Hydration Packs", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Jerseys", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Locks", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Mountain Bikes", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Mountain Frames", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Pedals", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Pumps", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Road Bikes", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Road Frames", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Saddles", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Shorts", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Socks", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Tights", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Tires
+    and Tubes", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Touring
+    Bikes", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Touring
+    Frames", "required": true}, {"type": "long", "name": "ProductSubCategoryName_Vests",
+    "required": true}, {"type": "long", "name": "ProductSubCategoryName_Wheels", "required":
+    true}, {"type": "long", "name": "ProductCategoryName_Accessories", "required":
+    true}, {"type": "long", "name": "ProductCategoryName_Bikes", "required": true},
+    {"type": "long", "name": "ProductCategoryName_Clothing", "required": true}, {"type":
+    "long", "name": "ProductCategoryName_Components", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Alberta", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Arizona", "required": true}, {"type": "long", "name":
+    "StateProvinceName_British Columbia", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Brunswick", "required": true}, {"type": "long", "name": "StateProvinceName_California",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Colorado", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Connecticut", "required": true},
+    {"type": "long", "name": "StateProvinceName_England", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Florida", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Georgia", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Hauts de Seine", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Illinois", "required": true}, {"type": "long", "name": "StateProvinceName_Indiana",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Loir et Cher",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Loiret", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Maine", "required": true},
+    {"type": "long", "name": "StateProvinceName_Michigan", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Minnesota", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Mississippi", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Missouri", "required": true}, {"type": "long", "name": "StateProvinceName_Nevada",
+    "required": true}, {"type": "long", "name": "StateProvinceName_New Hampshire",
+    "required": true}, {"type": "long", "name": "StateProvinceName_New Mexico", "required":
+    true}, {"type": "long", "name": "StateProvinceName_New South Wales", "required":
+    true}, {"type": "long", "name": "StateProvinceName_New York", "required": true},
+    {"type": "long", "name": "StateProvinceName_North Carolina", "required": true},
+    {"type": "long", "name": "StateProvinceName_Ohio", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Ontario", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Oregon", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Other", "required": true}, {"type": "long", "name": "StateProvinceName_Quebec",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Saarland", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Seine (Paris)", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Tennessee", "required": true},
+    {"type": "long", "name": "StateProvinceName_Texas", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Utah", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Victoria", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Virginia", "required": true}, {"type": "long", "name": "StateProvinceName_Washington",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Wisconsin", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Wyoming", "required": true},
+    {"type": "long", "name": "CountryName_Australia", "required": true}, {"type":
+    "long", "name": "CountryName_Canada", "required": true}, {"type": "long", "name":
+    "CountryName_France", "required": true}, {"type": "long", "name": "CountryName_Germany",
+    "required": true}, {"type": "long", "name": "CountryName_United Kingdom", "required":
+    true}, {"type": "long", "name": "CountryName_United States", "required": true},
+    {"type": "long", "name": "City_Bellingham", "required": true}, {"type": "long",
+    "name": "City_Burnaby", "required": true}, {"type": "long", "name": "City_Carson",
+    "required": true}, {"type": "long", "name": "City_Edmonton", "required": true},
+    {"type": "long", "name": "City_El Segundo", "required": true}, {"type": "long",
+    "name": "City_Etobicoke", "required": true}, {"type": "long", "name": "City_Garland",
+    "required": true}, {"type": "long", "name": "City_Houston", "required": true},
+    {"type": "long", "name": "City_Irving", "required": true}, {"type": "long", "name":
+    "City_Las Cruces", "required": true}, {"type": "long", "name": "City_London",
+    "required": true}, {"type": "long", "name": "City_Loveland", "required": true},
+    {"type": "long", "name": "City_Melville", "required": true}, {"type": "long",
+    "name": "City_Memphis", "required": true}, {"type": "long", "name": "City_Miami",
+    "required": true}, {"type": "long", "name": "City_Modesto", "required": true},
+    {"type": "long", "name": "City_Montreal", "required": true}, {"type": "long",
+    "name": "City_Nashua", "required": true}, {"type": "long", "name": "City_Ontario",
+    "required": true}, {"type": "long", "name": "City_Orlando", "required": true},
+    {"type": "long", "name": "City_Orleans", "required": true}, {"type": "long", "name":
+    "City_Other", "required": true}, {"type": "long", "name": "City_Paris", "required":
+    true}, {"type": "long", "name": "City_Phoenix", "required": true}, {"type": "long",
+    "name": "City_Richmond", "required": true}, {"type": "long", "name": "City_Saint
+    Louis", "required": true}, {"type": "long", "name": "City_Saint Ouen", "required":
+    true}, {"type": "long", "name": "City_San Antonio", "required": true}, {"type":
+    "long", "name": "City_Seattle", "required": true}, {"type": "long", "name": "City_Toronto",
+    "required": true}, {"type": "long", "name": "City_Vancouver", "required": true},
+    {"type": "long", "name": "StoretName_Advanced Bike Components", "required": true},
+    {"type": "long", "name": "StoretName_Bike Dealers Association", "required": true},
+    {"type": "long", "name": "StoretName_Closeout Boutique", "required": true}, {"type":
+    "long", "name": "StoretName_Corner Bicycle Supply", "required": true}, {"type":
+    "long", "name": "StoretName_Eastside Department Store", "required": true}, {"type":
+    "long", "name": "StoretName_Farthermost Bike Shop", "required": true}, {"type":
+    "long", "name": "StoretName_Fashionable Department Stores", "required": true},
+    {"type": "long", "name": "StoretName_Larger Cycle Shop", "required": true}, {"type":
+    "long", "name": "StoretName_Metropolitan Equipment", "required": true}, {"type":
+    "long", "name": "StoretName_Original Bicycle Supply Company", "required": true},
+    {"type": "long", "name": "StoretName_Other", "required": true}, {"type": "long",
+    "name": "StoretName_Paint Supply", "required": true}, {"type": "long", "name":
+    "StoretName_Permanent Finish Products", "required": true}, {"type": "long", "name":
+    "StoretName_Rapid Bikes", "required": true}, {"type": "long", "name": "StoretName_Real
+    Sporting Goods", "required": true}, {"type": "long", "name": "StoretName_Registered
+    Cycle Store", "required": true}, {"type": "long", "name": "StoretName_Resale Services",
+    "required": true}, {"type": "long", "name": "StoretName_Retail Mall", "required":
+    true}, {"type": "long", "name": "StoretName_Rewarding Activities Company", "required":
+    true}, {"type": "long", "name": "StoretName_Riders Company", "required": true},
+    {"type": "long", "name": "StoretName_Safe Cycles Shop", "required": true}, {"type":
+    "long", "name": "StoretName_Seventh Bike Store", "required": true}, {"type": "long",
+    "name": "StoretName_The Gear Store", "required": true}, {"type": "long", "name":
+    "StoretName_Top Sports Supply", "required": true}, {"type": "long", "name": "StoretName_Totes
+    & Baskets Company", "required": true}, {"type": "long", "name": "StoretName_Vigorous
+    Exercise Company", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-04-12 09:48:22.276346'

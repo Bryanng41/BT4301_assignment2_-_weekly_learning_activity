@@ -1,0 +1,9 @@
+connexion[flask,swagger-ui]>=2.14,<3
+gunicorn>=23,<24
+pandas>=2.2,<3
+numpy>=2.0
+scikit-learn>=1.5
+scipy>=1.11
+joblib>=1.3
+xgboost>=2.0
+lightgbm>=4.0

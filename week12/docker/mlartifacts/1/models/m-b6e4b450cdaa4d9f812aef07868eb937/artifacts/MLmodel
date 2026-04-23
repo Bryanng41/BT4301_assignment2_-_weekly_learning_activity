@@ -1,0 +1,138 @@
+artifact_path: mlflow-artifacts:/1/models/m-b6e4b450cdaa4d9f812aef07868eb937/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.11.1
+model_id: m-b6e4b450cdaa4d9f812aef07868eb937
+model_size_bytes: 20814
+model_uuid: m-b6e4b450cdaa4d9f812aef07868eb937
+prompts: null
+run_id: 4c7139d347ce49b39137f6bb4dca9f1c
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "long", "name": "OrderQty", "required": true}, {"type": "double",
+    "name": "StandardCost", "required": true}, {"type": "double", "name": "ListPrice",
+    "required": true}, {"type": "double", "name": "Weight", "required": true}, {"type":
+    "long", "name": "EmailPromotion", "required": true}, {"type": "long", "name":
+    "OrderDateYear", "required": true}, {"type": "long", "name": "OrderDateMonth",
+    "required": true}, {"type": "long", "name": "OrderDateDayOfWeek", "required":
+    true}, {"type": "long", "name": "OrderDateWeek", "required": true}, {"type": "long",
+    "name": "Color_Black", "required": true}, {"type": "long", "name": "Color_Blue",
+    "required": true}, {"type": "long", "name": "Color_Multi", "required": true},
+    {"type": "long", "name": "Color_Red", "required": true}, {"type": "long", "name":
+    "Color_Silver", "required": true}, {"type": "long", "name": "Color_Unknown", "required":
+    true}, {"type": "long", "name": "Color_White", "required": true}, {"type": "long",
+    "name": "Color_Yellow", "required": true}, {"type": "long", "name": "Size_38",
+    "required": true}, {"type": "long", "name": "Size_40", "required": true}, {"type":
+    "long", "name": "Size_42", "required": true}, {"type": "long", "name": "Size_44",
+    "required": true}, {"type": "long", "name": "Size_46", "required": true}, {"type":
+    "long", "name": "Size_48", "required": true}, {"type": "long", "name": "Size_50",
+    "required": true}, {"type": "long", "name": "Size_52", "required": true}, {"type":
+    "long", "name": "Size_54", "required": true}, {"type": "long", "name": "Size_56",
+    "required": true}, {"type": "long", "name": "Size_58", "required": true}, {"type":
+    "long", "name": "Size_60", "required": true}, {"type": "long", "name": "Size_62",
+    "required": true}, {"type": "long", "name": "Size_70", "required": true}, {"type":
+    "long", "name": "Size_L", "required": true}, {"type": "long", "name": "Size_M",
+    "required": true}, {"type": "long", "name": "Size_S", "required": true}, {"type":
+    "long", "name": "Size_Unknown", "required": true}, {"type": "long", "name": "Size_XL",
+    "required": true}, {"type": "long", "name": "ProductLine_M", "required": true},
+    {"type": "long", "name": "ProductLine_R", "required": true}, {"type": "long",
+    "name": "ProductLine_S", "required": true}, {"type": "long", "name": "ProductLine_T",
+    "required": true}, {"type": "long", "name": "Class_H", "required": true}, {"type":
+    "long", "name": "Class_L", "required": true}, {"type": "long", "name": "Class_M",
+    "required": true}, {"type": "long", "name": "Class_Unknown", "required": true},
+    {"type": "long", "name": "Style_U", "required": true}, {"type": "long", "name":
+    "Style_Unknown", "required": true}, {"type": "long", "name": "Style_W", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Bike Racks", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Bike Stands", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Bottles and Cages", "required":
+    true}, {"type": "long", "name": "ProductSubCategoryName_Caps", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Cleaners", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Fenders", "required": true},
+    {"type": "long", "name": "ProductSubCategoryName_Gloves", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Helmets", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Hydration Packs", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Jerseys", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Mountain Bikes", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Road Bikes", "required": true}, {"type":
+    "long", "name": "ProductSubCategoryName_Shorts", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Socks", "required": true}, {"type": "long", "name":
+    "ProductSubCategoryName_Tires and Tubes", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Touring Bikes", "required": true}, {"type": "long",
+    "name": "ProductSubCategoryName_Vests", "required": true}, {"type": "long", "name":
+    "ProductCategoryName_Accessories", "required": true}, {"type": "long", "name":
+    "ProductCategoryName_Bikes", "required": true}, {"type": "long", "name": "ProductCategoryName_Clothing",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Alabama", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Alberta", "required": true},
+    {"type": "long", "name": "StateProvinceName_Arizona", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Bayern", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Brandenburg", "required": true}, {"type": "long", "name":
+    "StateProvinceName_British Columbia", "required": true}, {"type": "long", "name":
+    "StateProvinceName_California", "required": true}, {"type": "long", "name": "StateProvinceName_Charente-Maritime",
+    "required": true}, {"type": "long", "name": "StateProvinceName_England", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Essonne", "required": true},
+    {"type": "long", "name": "StateProvinceName_Florida", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Garonne (Haute)", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Georgia", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Hamburg", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Hauts de Seine", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Hessen", "required": true}, {"type": "long", "name": "StateProvinceName_Illinois",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Kentucky", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Loir et Cher", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Loiret", "required": true},
+    {"type": "long", "name": "StateProvinceName_Massachusetts", "required": true},
+    {"type": "long", "name": "StateProvinceName_Minnesota", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Mississippi", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Missouri", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Montana", "required": true}, {"type": "long", "name": "StateProvinceName_Moselle",
+    "required": true}, {"type": "long", "name": "StateProvinceName_New South Wales",
+    "required": true}, {"type": "long", "name": "StateProvinceName_New York", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Nord", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Nordrhein-Westfalen", "required": true}, {"type":
+    "long", "name": "StateProvinceName_North Carolina", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Ohio", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Ontario", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Oregon", "required": true}, {"type": "long", "name": "StateProvinceName_Pas
+    de Calais", "required": true}, {"type": "long", "name": "StateProvinceName_Queensland",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Saarland", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Seine (Paris)", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Seine Saint Denis", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Seine et Marne", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Somme", "required": true},
+    {"type": "long", "name": "StateProvinceName_South Australia", "required": true},
+    {"type": "long", "name": "StateProvinceName_South Carolina", "required": true},
+    {"type": "long", "name": "StateProvinceName_Tasmania", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Texas", "required": true}, {"type": "long",
+    "name": "StateProvinceName_Utah", "required": true}, {"type": "long", "name":
+    "StateProvinceName_Val d''Oise", "required": true}, {"type": "long", "name": "StateProvinceName_Val
+    de Marne", "required": true}, {"type": "long", "name": "StateProvinceName_Victoria",
+    "required": true}, {"type": "long", "name": "StateProvinceName_Virginia", "required":
+    true}, {"type": "long", "name": "StateProvinceName_Washington", "required": true},
+    {"type": "long", "name": "StateProvinceName_Wyoming", "required": true}, {"type":
+    "long", "name": "StateProvinceName_Yveline", "required": true}, {"type": "long",
+    "name": "CountryName_Australia", "required": true}, {"type": "long", "name": "CountryName_Canada",
+    "required": true}, {"type": "long", "name": "CountryName_France", "required":
+    true}, {"type": "long", "name": "CountryName_Germany", "required": true}, {"type":
+    "long", "name": "CountryName_United Kingdom", "required": true}, {"type": "long",
+    "name": "CountryName_United States", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-04-12 09:24:53.170092'

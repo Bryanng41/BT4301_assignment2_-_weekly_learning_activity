@@ -1,0 +1,22 @@
+{
+  "categorical": [
+    "City",
+    "StateProvinceName",
+    "CountryName",
+    "ProductCategoryName",
+    "ProductSubCategoryName",
+    "ProductModelName",
+    "Color"
+  ],
+  "numeric": [
+    "CustomerID",
+    "ProductID",
+    "ListPrice",
+    "order_year",
+    "order_month",
+    "order_dow",
+    "user_train_lines_total",
+    "product_train_line_count",
+    "user_order_seq"
+  ]
+}
