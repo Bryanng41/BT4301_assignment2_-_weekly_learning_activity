@@ -30,8 +30,6 @@ NUMERIC_DRIFT = [
     'SalesOrderID',
     'LineTotal',
 ]
-# Log schema: `input_monitoring_log.csv` (raw columns + monitoring extras)
-CATEGORICAL_DRIFT: list[str] = []
 
 MODEL_TYPE: dict[str, str] = {
     'xgb': 'XGBoost',
@@ -263,30 +261,8 @@ def page_drift():
     else:
         st.caption('No overlapping numeric columns for KS test (check production log schema).')
 
-    chi_rows = []
-    for col in CATEGORICAL_DRIFT:
-        if col not in train_df.columns or col not in prod_df.columns:
-            continue
-        t = train_df[col].fillna('Unknown').astype(str).value_counts()
-        p = prod_df[col].fillna('Unknown').astype(str).value_counts()
-        cats = sorted(set(t.index) | set(p.index))
-        obs_t = np.array([t.get(c, 0) for c in cats], dtype=float)
-        obs_p = np.array([p.get(c, 0) for c in cats], dtype=float)
-        exp_p = obs_t / obs_t.sum() * obs_p.sum()
-        mask = (obs_t > 0) | (obs_p > 0)
-        if mask.sum() < 2:
-            continue
-        chi2, pval, _, _ = stats.chi2_contingency(
-            np.vstack([obs_t[mask], obs_p[mask]])
-        )
-        chi_rows.append({'feature': col, 'chi2': chi2, 'p_value': pval, 'drift': pval < 0.05})
-
-    if chi_rows:
-        st.subheader('Categorical features (chi-square on frequency tables)')
-        st.dataframe(pd.DataFrame(chi_rows))
-
-    drift_count = sum(r['drift'] for r in ks_rows) + sum(r['drift'] for r in chi_rows)
-    total = len(ks_rows) + len(chi_rows)
+    drift_count = sum(r['drift'] for r in ks_rows)
+    total = len(ks_rows)
     if total == 0:
         return
     ratio = drift_count / total

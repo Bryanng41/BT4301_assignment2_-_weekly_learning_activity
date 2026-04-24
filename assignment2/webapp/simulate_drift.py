@@ -41,9 +41,9 @@ LOG_COLUMNS: list[str] = [
 NUMERIC_DRIFT = ['CustomerID', 'ProductID', 'SalesOrderID', 'LineTotal']
 
 
-def _traffic_light(ks_rows: list[dict], chi_rows: list[dict]) -> tuple[str, float, int, int]:
-    drift_count = sum(r['drift'] for r in ks_rows) + sum(r['drift'] for r in chi_rows)
-    total = len(ks_rows) + len(chi_rows)
+def _traffic_light(ks_rows: list[dict]) -> tuple[str, float, int, int]:
+    drift_count = sum(r['drift'] for r in ks_rows)
+    total = len(ks_rows)
     if total == 0:
         return 'n/a (no tests ran)', float('nan'), drift_count, total
     ratio = drift_count / total
@@ -151,7 +151,7 @@ def main() -> None:
 
     prod_df.to_csv(out_path, index=False)
     ks_rows = run_ks(train_df, prod_df)
-    light, ratio, dcount, ntests = _traffic_light(ks_rows, [])
+    light, ratio, dcount, ntests = _traffic_light(ks_rows)
 
     print()
     print('=' * 72)
