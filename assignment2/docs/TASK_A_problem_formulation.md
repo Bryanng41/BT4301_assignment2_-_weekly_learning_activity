@@ -51,7 +51,7 @@ After selection, the script **re-fits** the **winner** on **full** training data
 
 - **Tabular (log_reg / rf / xgb / lgbm):** `fit_clf` trains a new pipeline; **`clf_extras`**, **`clf_threshold`**, and **meta** are included in a Python **`dict`** (saved in **`serve_bundle.pkl`**).
 
-The full inference bundle is saved with **`joblib.dump`** to **`docker/model/serve_bundle.pkl`** (plus **`recsys_meta.pkl`** for metadata). This file is the **“pickle packaged into the container”** for deployment.
+The full inference bundle is saved with **`joblib.dump`** to **`docker/model/serve_bundle.pkl`** (plus **`interaction_meta.pkl`** for metadata). This file is the **“pickle packaged into the container”** for deployment.
 
 ### Docker image and REST API
 

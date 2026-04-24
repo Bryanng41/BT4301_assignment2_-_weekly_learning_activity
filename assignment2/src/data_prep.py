@@ -46,13 +46,11 @@ def load_interactions() -> pd.DataFrame:
 def temporal_train_test_split(
     df: pd.DataFrame,
     test_size: float = 0.2,
-    random_state: int = 42,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Per customer: sort by OrderDate (then SalesOrderID); last ceil(n * test_size)
     interactions go to test. Customers with <2 interactions are train-only.
     """
-    _ = random_state  # reserved for future stratified variants
     df = df.sort_values(
         ["CustomerID", "OrderDate", "SalesOrderID"],
         kind="mergesort",
@@ -185,14 +183,14 @@ def train_user_seen_items(train_csr: sparse.csr_matrix) -> list[set[int]]:
     return out
 
 
-def write_recommender_metadata_pickle(path: str, meta: dict[str, Any]) -> None:
+def write_interaction_metadata_pickle(path: str, meta: dict[str, Any]) -> None:
     """Persist id maps, test pairs, CSR helpers, etc. (from `prepare_interaction_split`) as a pickle file."""
     with open(path, "wb") as f:
         pickle.dump(meta, f)
 
 
-def read_recommender_metadata_pickle(path: str) -> dict[str, Any]:
-    """Load a `recsys_meta.pkl` written by `write_recommender_metadata_pickle`."""
+def read_interaction_metadata_pickle(path: str) -> dict[str, Any]:
+    """Load an `interaction_meta.pkl` written by `write_interaction_metadata_pickle`."""
     with open(path, "rb") as f:
         return pickle.load(f)
 
@@ -201,7 +199,6 @@ def prepare_interaction_split(
     df: pd.DataFrame | None = None,
     *,
     test_size: float = 0.2,
-    random_state: int = 42,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any], sparse.csr_matrix]:
     """
     Load (if df is None), split, build id maps and product names, train CSR,
@@ -209,9 +206,7 @@ def prepare_interaction_split(
     """
     if df is None:
         df = load_interactions()
-    train_df, test_df = temporal_train_test_split(
-        df, test_size=test_size, random_state=random_state
-    )
+    train_df, test_df = temporal_train_test_split(df, test_size=test_size)
     try:
         names = load_product_names()
     except Exception:
@@ -225,7 +220,6 @@ def prepare_interaction_split(
         }
     meta = build_id_maps(train_df, test_df, product_names=names)
     meta["test_size"] = float(test_size)
-    meta["random_state"] = int(random_state)
     train_csr = build_train_csr(train_df, meta, binary=True)
     meta["train_user_items"] = train_user_seen_items(train_csr)
     meta["test_pairs"] = test_pairs_from_df(test_df, meta, train_csr)
@@ -269,10 +263,8 @@ if __name__ == "__main__":
     pd.concat([train_df, test_df], ignore_index=True).to_csv(
         "../data/raw_data.csv", index=False
     )
-    write_recommender_metadata_pickle("../data/recsys_meta.pkl", meta)
+    write_interaction_metadata_pickle("../data/interaction_meta.pkl", meta)
     write_train_interaction_stats_json(train_df, "../data/training_stats.json")
 
     with open("../data/feature_names.json", "w") as f:
         json.dump(["CustomerID", "ProductID", "OrderDate"], f, indent=2)
-
-    print("Done. Wrote ../data/interactions_*.csv, raw_data.csv, recsys_meta.pkl, training_stats.json")

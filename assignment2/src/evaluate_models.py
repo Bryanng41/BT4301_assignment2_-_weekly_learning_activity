@@ -17,7 +17,7 @@ from clf_modeling import fit_clf, load_clf_extras
 from data_prep import (
     load_interactions,
     prepare_interaction_split,
-    write_recommender_metadata_pickle,
+    write_interaction_metadata_pickle,
 )
 from purchase_prediction import EXPERIMENT_KIND
 
@@ -90,16 +90,12 @@ def main():
     _data = os.path.join(_root, "data")
     train_path = os.path.join(_data, "train_events.csv")
     extras_path = os.path.join(_data, "clf_extras.pkl")
-    imin_path = os.path.join(_data, "raw_data.csv")
     if not os.path.isfile(train_path):
         raise SystemExit(
-            f"Missing {train_path}. Run src/baseline_model.py first to build event tables."
+            f"Missing {train_path}"
         )
     tr_ev = pd.read_csv(train_path)
-    if os.path.isfile(imin_path):
-        imin = pd.read_csv(imin_path, parse_dates=["OrderDate"])
-    else:
-        imin = load_interactions()
+    imin = load_interactions()
     if "SalesOrderID" not in imin.columns:
         imin["SalesOrderID"] = range(len(imin))
     if "LineTotal" not in imin.columns:
@@ -111,12 +107,10 @@ def main():
     if kind not in ("log_reg", "rf", "xgb", "lgbm"):
         raise ValueError(f"Unknown production kind: {kind}")
 
-    model, clf_threshold, _ = fit_clf(kind, tr_ev)  # type: ignore[misc]
+    model, clf_threshold, _ = fit_clf(kind, tr_ev)
     clf_extras = None
     if os.path.isfile(extras_path):
         clf_extras = load_clf_extras(extras_path)
-
-    print(f"   Refit done for kind={kind}")
 
     out_dir = os.path.join(_root, "docker", "model")
     os.makedirs(out_dir, exist_ok=True)
@@ -131,7 +125,7 @@ def main():
     }
     joblib.dump(bundle, os.path.join(out_dir, "serve_bundle.pkl"))
 
-    write_recommender_metadata_pickle(os.path.join(out_dir, "recsys_meta.pkl"), meta)
+    write_interaction_metadata_pickle(os.path.join(out_dir, "interaction_meta.pkl"), meta)
 
     card = {
         "task": "purchase_classification",
@@ -141,10 +135,6 @@ def main():
         "best_f1_mlflow": best["f1"],
         "recommender_kind": kind,
         "comparison": rows,
-        "rationale": (
-            "Production model is the experiment with the highest f1 in MLflow on the test_events "
-            "table (5 negatives per user; temporal train/test split). Refit on full training data."
-        ),
     }
     with open(os.path.join(out_dir, "model_card.json"), "w") as f:
         json.dump(card, f, indent=2)
@@ -160,7 +150,7 @@ def main():
     if os.path.isfile(raw_src):
         shutil.copy2(raw_src, raw_dst)
 
-    print(f"\nExported: {out_dir}/serve_bundle.pkl, recsys_meta.pkl, model_card.json")
+    print(f"\nExported: {out_dir}/serve_bundle.pkl, interaction_meta.pkl, model_card.json")
 
 
 if __name__ == "__main__":

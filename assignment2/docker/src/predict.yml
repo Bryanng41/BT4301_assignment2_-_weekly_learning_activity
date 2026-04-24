@@ -1,12 +1,7 @@
 swagger: "2.0"
 info:
   version: "1.0.0"
-  title: "BT4301 Assignment 2 — Purchase prediction (customer × product)"
-  description: >
-    Binary purchase prediction: for a given CustomerID and ProductID, returns P(purchase)
-    (trained tabular model), decision threshold, and predicted_purchase. Unknown products
-    return 400. Customers not seen in training are scored with default feature values;
-    cold_start_user is set when applicable.
+  title: "BT4301 Assignment 2"
 
 basePath: /
 
@@ -62,9 +57,6 @@ paths:
                 x-nullable: true
               cold_start_user:
                 type: boolean
-              message:
-                type: string
-                x-nullable: true
         400:
           description: Bad request (e.g. unknown product)
           schema:

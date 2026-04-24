@@ -46,6 +46,5 @@
       "description": "Neural collaborative filtering",
       "artifact_subdir": "alternative_model_3"
     }
-  ],
-  "rationale": "Production model is the experiment with the highest f1 in MLflow on the test_events table (5 negatives per user; temporal train/test split). Refit on full training data."
+  ]
 }

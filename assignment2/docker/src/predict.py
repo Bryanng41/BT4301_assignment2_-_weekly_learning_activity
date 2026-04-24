@@ -19,7 +19,7 @@ def _load():
 
 def purchase(customer_id, product_id):
     """
-    Query params from OpenAPI: predict purchase (yes/no) for one customer–product pair.
+    Query params returns predict purchase (yes/no) for one customer–product pair.
     """
     _load()
     cid = int(customer_id)

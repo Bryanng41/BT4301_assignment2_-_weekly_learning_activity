@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 from datetime import datetime, timezone
 
 import numpy as np
@@ -10,13 +9,14 @@ import streamlit as st
 from scipy import stats
 
 _BASE = os.path.dirname(os.path.abspath(__file__))
-# Single schema: raw_data columns (drift) + API monitoring fields. Do not mix with other apps' CSVs.
+
+# Single schema: raw_data columns (drift) + API monitoring fields
 LOG_PATH = os.path.join(_BASE, 'input_monitoring_log.csv')
 LEGACY_LOG_PATH = os.path.join(_BASE, 'production_log.csv')
 TRAIN_RAW = os.path.join(_BASE, 'raw_data.csv')
 STATS_PATH = os.path.join(_BASE, 'training_stats.json')
 
-# Aligned to webapp/raw_data.csv from evaluate_models + prediction metadata (fixed column order for CSV)
+# Aligned to raw_data.csv from evaluate_models + prediction metadata
 RAW_DRIFT_COLS = ['CustomerID', 'ProductID', 'SalesOrderID', 'OrderDate', 'LineTotal']
 MONITORING_EXTRA_COLS = [
     'kind', 'score', 'threshold', 'predicted_purchase', 'cold_start_user', 'ts_utc',
@@ -33,7 +33,7 @@ NUMERIC_DRIFT = [
 # Log schema: `input_monitoring_log.csv` (raw columns + monitoring extras)
 CATEGORICAL_DRIFT: list[str] = []
 
-_MODEL_KIND_PRETTY: dict[str, str] = {
+MODEL_TYPE: dict[str, str] = {
     'xgb': 'XGBoost',
     'lgbm': 'LightGBM',
     'lr': 'Logistic regression',
@@ -53,11 +53,11 @@ def _round2(x) -> str:
         return '—'
 
 
-def _model_display_name(kind: str | None) -> str:
+def model_type(kind: str | None) -> str:
     if not kind:
         return '—'
     k = str(kind).lower().strip()
-    return _MODEL_KIND_PRETTY.get(k, k.replace('_', ' ').title())
+    return MODEL_TYPE.get(k, k.replace('_', ' ').title())
 
 
 def _historical_purchase_pairs(ref_df: pd.DataFrame) -> set[tuple[int, int]]:
@@ -97,33 +97,13 @@ def append_log(row: dict) -> None:
 
 
 def read_monitoring_log() -> pd.DataFrame | None:
-    """Read log; on parse failure, offer recovery (legacy mixed files)."""
+    """Read the monitoring log if present; otherwise None."""
     path = LOG_PATH
     if not os.path.isfile(path) and os.path.isfile(LEGACY_LOG_PATH):
         path = LEGACY_LOG_PATH
     if not os.path.isfile(path):
         return None
-    try:
-        return pd.read_csv(path)
-    except pd.errors.ParserError as e:
-        st.error(
-            f'**Log file is not a valid table** (mixed column counts or corrupt rows). '
-            f'Path: `{os.path.basename(path)}`. Error: {e}'
-        )
-        c1, c2 = st.columns(2)
-        with c1:
-            if st.button('Back up and reset log (recommended)'):
-                ts = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-                bak = f'{path}.bak.{ts}'
-                shutil.copy2(path, bak)
-                os.remove(path)
-                st.success(
-                    f'Backed up to `{os.path.basename(bak)}` and removed `{os.path.basename(path)}`.'
-                )
-                st.rerun()
-        with c2:
-            st.caption('Or delete/rename the file manually, then refresh.')
-        return None
+    return pd.read_csv(path)
 
 
 def page_predict():
@@ -132,15 +112,7 @@ def page_predict():
         'PREDICT_API_BASE',
         'http://172.17.0.1:5002',
     )
-    api_base = st.text_input(
-        'REST API base URL',
-        value=_default_api,
-        help=(
-            'If Streamlit runs **inside a dev container** and the API is another Docker container, '
-            'use the Docker host gateway (often http://172.17.0.1:5002), not http://127.0.0.1:5002. '
-            'On your laptop with Docker Desktop only, use http://localhost:5002.'
-        ),
-    )
+    api_base = st.text_input('REST API base URL', value=_default_api)
 
     customer_id = st.number_input('Customer ID', value=11000, min_value=1, step=1, format='%d')
     product_id = st.number_input('Product ID', value=771, min_value=1, step=1, format='%d')
@@ -164,10 +136,8 @@ def page_predict():
             return
         out = r.json()
 
-        if out.get('message'):
-            st.warning(out['message'])
         if out.get('cold_start_user'):
-            st.caption('Cold-start user: see message above (scored with default feature values).')
+            st.caption('Cold-start user: not in the training user index; score uses default feature values.')
 
         kind_raw = (out.get('kind') or '') or ''
         name = (out.get('product_name') or 'Product').strip() or 'Product'
@@ -175,7 +145,7 @@ def page_predict():
         pid = int(out.get('product_id', product_id))
         st.caption(f'Customer **{int(customer_id):,}** · Product **{pid:,}**')
 
-        model_name = _model_display_name(kind_raw)
+        model_name = model_type(kind_raw)
         score_label = 'P(purchase)'
         score_caption = 'Probability of purchase for this customer–product pair (0–1).'
         thr_caption = 'If the score is at or above this cutoff, we predict a purchase.'

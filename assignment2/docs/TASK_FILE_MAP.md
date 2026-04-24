@@ -20,8 +20,8 @@ This document maps project files to **Task A** (problem formulation), **Task B**
 
 | File | Role |
 |------|------|
-| `src/data_prep.py` | Loads interaction lines (MySQL or `data/raw_data.csv`), **temporal train/test split**, builds **user×item** metadata (`recsys_meta.pkl`), `raw_data.csv`, `training_stats.json`, etc. |
-| `src/classification_data.py` | Joins warehouse features, builds **enriched** rows, **`train_events.csv` / `test_events.csv`** with **sampled negatives**, saves `clf_extras.pkl` / feature config when scripts run. Defines **`CATEGORICAL_FEATURES`** and **`NUMERIC_FEATURES`**. |
+| `src/data_prep.py` | Loads interaction lines from **MySQL**, **temporal train/test split**, builds **user×item** metadata (`interaction_meta.pkl`), `raw_data.csv`, `training_stats.json`, etc. |
+| `src/classification_data.py` | **MySQL** (`CLASSIFICATION_ENRICH_QUERY`) for enriched lines, builds **`train_events.csv` / `test_events.csv`** with **sampled negatives**, saves `clf_extras.pkl` / feature config when scripts run. Defines **`CATEGORICAL_FEATURES`** and **`NUMERIC_FEATURES`**. Cached event CSVs can be reused on reruns without re-querying. |
 
 ### Shared modeling & logging
 
@@ -43,7 +43,7 @@ This document maps project files to **Task A** (problem formulation), **Task B**
 
 | File | Role |
 |------|------|
-| `src/evaluate_models.py` | Reads **latest run per experiment** in MLflow, picks **highest F1**, **refits** the winner on full `train_events`, writes **`docker/model/serve_bundle.pkl`**, `recsys_meta.pkl`, `model_card.json`, copies stats/CSVs to `webapp/`. |
+| `src/evaluate_models.py` | Reads **latest run per experiment** in MLflow, picks **highest F1**, **refits** the winner on full `train_events`, writes **`docker/model/serve_bundle.pkl`**, `interaction_meta.pkl`, `model_card.json`, copies stats/CSVs to `webapp/`. |
 
 ### Task B notebooks (evidence / analysis)
 
@@ -73,14 +73,13 @@ This document maps project files to **Task A** (problem formulation), **Task B**
 | `docker/src/server.py` | **Connexion + Flask** entry: loads OpenAPI spec, serves routes. |
 | `docker/src/predict.yml` | **OpenAPI 2** spec: `GET /api/purchase`, response schema. |
 | `docker/src/predict.py` | Loads **`serve_bundle.pkl`**, calls **`predict_purchase_for_pair`**, returns JSON (or 400 for bad input). |
-| `docker/src/encode.py` | Placeholder / small helpers (optional). |
 
 ### Artifacts produced for the container (after `evaluate_models.py`)
 
 | File | Role |
 |------|------|
 | `docker/model/serve_bundle.pkl` | **Exported winner:** trained pipeline, `kind`, `meta`, `clf_extras`, `clf_threshold`. |
-| `docker/model/recsys_meta.pkl` | Copy of recommender/event **metadata** (id maps, catalog size, etc.). |
+| `docker/model/interaction_meta.pkl` | Copy of recommender/event **metadata** (id maps, catalog size, etc.). |
 | `docker/model/model_card.json` | **Traceability:** best experiment, run id, F1, comparison rows. |
 
 ---

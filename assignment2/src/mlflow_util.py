@@ -1,10 +1,3 @@
-"""MLflow: tracking URI and helpers to log sklearn pipelines (course style).
-
-Precedence: ``MLFLOW_TRACKING_URI`` if set, else the class tracking server on
-port 9080. For offline / file-only use: set
-``export MLFLOW_TRACKING_URI=file:/absolute/path/to/assignment2/mlruns``
-before training.
-"""
 from __future__ import annotations
 
 import os

@@ -1,4 +1,4 @@
-"""Sklearn pipelines for purchase classification: LR, RF, XGBoost, LightGBM (Task B tabular)."""
+"""Cleans and prepares features for each of the four classifiers models."""
 from __future__ import annotations
 
 import os
@@ -24,7 +24,7 @@ from classification_data import CATEGORICAL_FEATURES, NUMERIC_FEATURES
 
 ClfKind = Literal["log_reg", "rf", "xgb", "lgbm"]
 
-# Logistic regression: fixed decision threshold on P(purchase) (see notebooks/threshold_logistic_regression.ipynb).
+# Logistic regression: fixed decision threshold on P(purchase)
 LOG_REG_PROBA_THRESHOLD = 0.02
 
 
@@ -328,12 +328,12 @@ def write_rec_and_clf_artifacts(
     base: pd.DataFrame,
 ) -> tuple[dict[str, Any], pd.DataFrame, Any]:
     """
-    Minimal interaction lines → `prepare_interaction_split` → `recsys_meta`,
+    Minimal interaction lines → `prepare_interaction_split` → `interaction_meta.pkl`,
     `clf_extras.pkl`, and `training_stats.json`.
     """
     from data_prep import (
         prepare_interaction_split,
-        write_recommender_metadata_pickle,
+        write_interaction_metadata_pickle,
         write_train_interaction_stats_json,
     )
 
@@ -352,8 +352,8 @@ def write_rec_and_clf_artifacts(
         customer_dim=customer_dim,
         user_stats=ustats,
     )
-    write_recommender_metadata_pickle(
-        os.path.join(data_dir, "recsys_meta.pkl"),
+    write_interaction_metadata_pickle(
+        os.path.join(data_dir, "interaction_meta.pkl"),
         meta,
     )
     write_train_interaction_stats_json(

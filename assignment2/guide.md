@@ -16,14 +16,14 @@ End-to-end workflow:
 
 | Path | Role |
 |------|------|
-| `src/data_prep.py` | MySQL (or `raw_data.csv` fallback) interaction extract, temporal split, `recsys_meta.pkl`, `interactions_*.csv`, `raw_data.csv`, `training_stats.json`. |
+| `src/data_prep.py` | MySQL interaction extract, temporal split, `interaction_meta.pkl`, `interactions_*.csv`, `raw_data.csv`, `training_stats.json`. |
 | `src/classification_data.py` | Enriched features and **`train_events.csv` / `test_events.csv`**, five negatives per user, `clf_extras` / `dim` pickles as built by training scripts. |
 | `src/clf_modeling.py` | Sklearn **pipelines** (LR, RF, XGB, LightGBM) and **inference** row builder for tabular models. |
 | `src/mlflow_util.py` | Default MLflow **`http://127.0.0.1:9080`** if **`MLFLOW_TRACKING_URI`** is unset; helpers to **`mlflow.log_model`** (tabular sklearn **Pipeline**). Set **`file:…/assignment2/mlruns`** for file-only (offline) tracking. |
 | `src/purchase_prediction.py` | **`predict_purchase_for_pair`** and **`EXPERIMENT_KIND`** (MLflow experiment name → `kind` string for export). |
 | `src/baseline_model.py` | **Logistic regression** on events + MLflow. |
 | `src/alternative_model_*.py` | **Random forest** / **XGBoost** / **LightGBM** + MLflow. |
-| `src/evaluate_models.py` | Picks best by **highest f1** (test event table), refits, exports `docker/model/serve_bundle.pkl`, `recsys_meta.pkl`, `model_card.json`; copies **`training_stats.json`** and **`raw_data.csv`** into **`webapp/`**. |
+| `src/evaluate_models.py` | Picks best by **highest f1** (test event table), refits, exports `docker/model/serve_bundle.pkl`, `interaction_meta.pkl`, `model_card.json`; copies **`training_stats.json`** and **`raw_data.csv`** into **`webapp/`**. |
 | `data/` | See above, plus `train_events.csv`, `test_events.csv`, `clf_*` as generated. |
 | `docker/` | `Dockerfile` (context `..`), `compose.yaml`, `requirements.txt`, **`src/`** (app + copies of `purchase_prediction.py`, `clf_modeling.py`, `classification_data.py`), **`model/`** (bundle from `evaluate_models.py`). |
 | `webapp/` | Streamlit `app.py`; receives copies of `raw_data.csv` / `training_stats.json`; writes `production_log.csv`. |
@@ -38,7 +38,7 @@ End-to-end workflow:
   pip install mysql-connector-python pandas numpy scipy scikit-learn xgboost lightgbm mlflow joblib
   ```
 
-- **MySQL** with Assignment 1 warehouse: host `localhost`, database **`datawarehouse`**, user **`root`** (adjust `DB_CONFIG` in `src/data_prep.py` if yours differs). If MySQL is down, **`data/raw_data.csv`** is used to build splits and event tables.
+- **MySQL** with Assignment 1 warehouse: host `localhost`, database **`datawarehouse`**, user **`root`** (adjust `DB_CONFIG` in `src/data_prep.py` and `src/classification_data.py` if yours differs). **Training and enriched loads** read from MySQL only; **`data/raw_data.csv`** is written by **`data_prep.py`** for drift / handoff, not as a substitute for the DB when building event tables.
 - **MLflow:** Training defaults to the tracking server at **`http://127.0.0.1:9080`**. For a **local file store** only (no server), set e.g. **`export MLFLOW_TRACKING_URI=file:/absolute/path/to/assignment2/mlruns`** (see `src/mlflow_util.py`). Start **`mlflow server --port 9080`** *before* training if you use the default URI.
 - **Docker** (optional) to run the API container.
 - **Streamlit**: **`webapp/requirements.txt`**.
@@ -80,7 +80,7 @@ cd /path/to/assignment2/src
 python data_prep.py
 ```
 
-**Check:** `../data/interactions_train.csv`, `interactions_test.csv`, `raw_data.csv`, and `recsys_meta.pkl` exist. The script prints train/test line counts and the number of evaluation **test pairs**.
+**Check:** `../data/interactions_train.csv`, `interactions_test.csv`, `raw_data.csv`, and `interaction_meta.pkl` exist. The script prints train/test line counts and the number of evaluation **test pairs**.
 
 ### 2. Train all four models
 
@@ -104,7 +104,7 @@ python evaluate_models.py
 **Check:**
 
 - Console prints a comparison table (**higher f1 is better**) and names the winning experiment.
-- Files exist: `docker/model/serve_bundle.pkl`, `docker/model/recsys_meta.pkl`, `docker/model/model_card.json`.
+- Files exist: `docker/model/serve_bundle.pkl`, `docker/model/interaction_meta.pkl`, `docker/model/model_card.json`.
 - `webapp/raw_data.csv` and `webapp/training_stats.json` were copied (needed for the drift tab).
 
 If you see **“No runs found”**, the MLflow server was not running or no training script completed successfully.
@@ -134,7 +134,7 @@ bash docker/smoke_api.sh
 **Check:** JSON includes `product_id`, `product_name`, `kind`, `score` (P(purchase)), `threshold`, `predicted_purchase`, and `cold_start_user` (true if the user id was unseen in the training user index; the row is still scored with default feature values). Example pair `(11000, 771)` is in `data/train_events.csv`.
 
 - **Swagger UI:** open **http://localhost:5002/ui** or **http://localhost:5002/apidocs** (exact path depends on your Connexion version; if one 404s, try the other or read the container log for the docs URL).
-- **Cold start:** use a `customer_id` that does not appear in training — you should get `cold_start_user: true`, a numeric `score` from default feature values, and a short `message`.
+- **Cold start:** use a `customer_id` that does not appear in training — you should get `cold_start_user: true` and a numeric `score` from default feature values.
 
 **From inside a Linux dev container** where `localhost` is not the host, try **`http://172.17.0.1:5002`** instead of `localhost`.
 
@@ -183,7 +183,7 @@ Writes under **`../data/`**:
 
 - `interactions_train.csv`, `interactions_test.csv` — line-level splits  
 - `raw_data.csv` — train+test interactions (drift reference)  
-- `recsys_meta.pkl` — id maps, test pairs, train user item sets, popularity  
+- `interaction_meta.pkl` — id maps, test pairs, train user item sets, popularity  
 - `training_stats.json`, `feature_names.json`
 
 ---
@@ -209,7 +209,7 @@ cd /path/to/assignment2/src
 python evaluate_models.py
 ```
 
-Selects the experiment with the **highest f1**, refits the **winner** (tabular), writes **`docker/model/`** ( **`serve_bundle.pkl`**, **`recsys_meta.pkl`**, **`model_card.json`** ), and copies into **`webapp/`**:
+Selects the experiment with the **highest f1**, refits the **winner** (tabular), writes **`docker/model/`** ( **`serve_bundle.pkl`**, **`interaction_meta.pkl`**, **`model_card.json`** ), and copies into **`webapp/`**:
 
 - `webapp/training_stats.json`
 - `webapp/raw_data.csv`
@@ -359,7 +359,7 @@ streamlit run app.py --server.address 0.0.0.0 --server.port 8501
 
 ### 5.5 Using the app
 
-- **Purchase prediction tab:** `customer_id`, `product_id` → **`GET /api/purchase`** → **score / threshold / predicted_purchase** for that pair. Unknown **ProductID** returns **400**. Cold-start users get **P(purchase)** with default feature values (see `message`).
+- **Purchase prediction tab:** `customer_id`, `product_id` → **`GET /api/purchase`** → **score / threshold / predicted_purchase** for that pair. Unknown **ProductID** returns **400**. Cold-start users get **P(purchase)** with default feature values (`cold_start_user: true`).
 - **Drift tab:** KS tests on numeric columns present in both **`raw_data.csv`** and **`production_log.csv`** (e.g. `CustomerID`).
 
 ---
@@ -379,7 +379,7 @@ streamlit run app.py --server.address 0.0.0.0 --server.port 8501
 
 See **How to test everything (end-to-end)** above for detailed checks. Short version:
 
-1. Start **MySQL** (or rely on **`data/raw_data.csv`**); start **MLflow** on **:9080** (or set **`MLFLOW_TRACKING_URI=file:…/mlruns`**); activate venv with **`lightgbm`**, **`xgboost`**, **`scikit-learn`**, etc. (see install lines above).
+1. Start **MySQL**; start **MLflow** on **:9080** (or set **`MLFLOW_TRACKING_URI=file:…/mlruns`**); activate venv with **`lightgbm`**, **`xgboost`**, **`scikit-learn`**, etc. (see install lines above).
 2. `cd assignment2/src && python data_prep.py`
 3. Run the four training scripts; confirm metrics in MLflow.
 4. `python evaluate_models.py` — confirm `docker/model/serve_bundle.pkl` exists.

@@ -70,60 +70,15 @@ def _ensure_cols(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_enriched_interactions() -> pd.DataFrame:
-    """
-    Line-level data with product + customer attributes.
-    Tries MySQL; falls back to raw_data + empty enrich if DB unavailable.
-    """
-    from data_prep import DB_CONFIG, load_interactions
+    from data_prep import DB_CONFIG
 
     import mysql.connector
 
+    conn = mysql.connector.connect(**DB_CONFIG)
     try:
-        conn = mysql.connector.connect(**DB_CONFIG)
-        try:
-            df = pd.read_sql(CLASSIFICATION_ENRICH_QUERY, conn)
-        finally:
-            conn.close()
-    except Exception as e:
-        # Fallback: CSV from data pipeline (no MySQL)
-        print(f"classification_data: MySQL load failed ({e!r}). Trying data/raw_data.csv fallback.")
-        raw = os.path.join(os.path.dirname(__file__), "..", "data", "raw_data.csv")
-        if os.path.isfile(raw):
-            df = pd.read_csv(raw, parse_dates=["OrderDate"])
-            for c in [
-                "ProductCategoryName",
-                "ProductSubCategoryName",
-                "ProductModelName",
-                "Color",
-                "ListPrice",
-                "City",
-                "StateProvinceName",
-                "CountryName",
-                "SalesOrderID",
-            ]:
-                if c not in df.columns:
-                    df[c] = np.nan
-            if "LineTotal" not in df.columns:
-                df["LineTotal"] = 1.0
-            if "SalesOrderID" in df.columns:
-                df["SalesOrderID"] = pd.to_numeric(df["SalesOrderID"], errors="coerce").fillna(-1).astype(np.int64)
-        else:
-            print("No raw_data.csv; using load_interactions() (requires MySQL).")
-            df = load_interactions()
-            for c in [
-                "ProductCategoryName",
-                "ProductSubCategoryName",
-                "ProductModelName",
-                "Color",
-                "ListPrice",
-                "City",
-                "StateProvinceName",
-                "CountryName",
-            ]:
-                if c not in df.columns:
-                    df[c] = np.nan
-            if "LineTotal" not in df.columns:
-                df["LineTotal"] = 1.0
+        df = pd.read_sql(CLASSIFICATION_ENRICH_QUERY, conn)
+    finally:
+        conn.close()
     df["OrderDate"] = pd.to_datetime(df["OrderDate"], errors="coerce")
     df = df.dropna(subset=["CustomerID", "ProductID", "OrderDate"])
     df["CustomerID"] = df["CustomerID"].astype(np.int64)
@@ -248,9 +203,7 @@ def build_train_test_event_tables(
         df = load_enriched_interactions()
     else:
         df = _ensure_cols(_add_time_features(df.copy()))
-    train_df, test_df = temporal_train_test_split(
-        df, test_size=test_size, random_state=random_state
-    )
+    train_df, test_df = temporal_train_test_split(df, test_size=test_size)
     pool_train = np.sort(train_df["ProductID"].unique())
     if pool_train.size == 0:
         raise ValueError("No products in train split.")
@@ -434,11 +387,6 @@ def load_or_build_event_tables(
     random_state: int = 42,
     always_rebuild: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Reuse `train_events.csv` / `test_events.csv` when present (fast reruns);
-    otherwise build from `load_enriched_interactions` and write CSVs.
-    If ``always_rebuild`` is True, always rebuild and overwrite CSVs (baseline).
-    """
     tpath = os.path.join(out_dir, "train_events.csv")
     ppath = os.path.join(out_dir, "test_events.csv")
     if always_rebuild or not (os.path.isfile(tpath) and os.path.isfile(ppath)):

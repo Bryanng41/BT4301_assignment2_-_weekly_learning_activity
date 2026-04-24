@@ -23,7 +23,7 @@ Confirm exact zip layout with your instructor.
 | File | Role |
 |------|------|
 | `docs/TASK_A_problem_formulation.md` | Problem/challenge/opportunity, how recommendations address it, and how success might be judged. |
-| `src/data_prep.py` | Pulls interaction-level data from MySQL, builds **temporal 80/20 per-customer** split, writes train/test interactions, **`raw_data.csv`**, **`recsys_meta.pkl`**, **`training_stats.json`**, etc. Feeds all modeling and drift reference. `prepare_interaction_split` falls back to **product name maps** from train/test IDs if the warehouse is unreachable. |
+| `src/data_prep.py` | Pulls interaction-level data from MySQL, builds **temporal 80/20 per-customer** split, writes train/test interactions, **`raw_data.csv`**, **`interaction_meta.pkl`**, **`training_stats.json`**, etc. Feeds all modeling and drift reference. If product names cannot be loaded from the warehouse, **id-based** display names are used when building metadata. |
 | `src/classification_data.py` | **Enriched** line-level features (product + customer + time), **train/test 0-1** event tables (**5 negatives per user** in train, same in test, sampled from the train product pool), optional **`data/train_events.csv`**, **`data/test_events.csv`**, **`data/clf_extras.pkl`**, **`clf_feature_config.json`**. |
 | `src/clf_modeling.py` | Sklearn **pipelines** (OHE + scaling + LR / RF / XGB / LightGBM), **tuned proba threshold** for reporting, **inference** row builder for the API. |
 | `notebooks/investigate_orderqty_target.ipynb` | Exploratory / investigative work (often cited in Task A or B); may include plots or narrative. |
@@ -49,12 +49,11 @@ Confirm exact zip layout with your instructor.
 | `docker/compose.yaml` | Runs the `api` service; maps host **`5002` → container `5000`**. |
 | `docker/requirements.txt` | Pip deps for the **container** (Connexion, pandas, scikit-learn, xgboost, lightgbm, etc.). |
 | `docker/.dockerignore` | Shrinks build context / speeds builds. |
-| `docker/src/server.py` | Connexion **Flask** entrypoint: loads `predict.yml`, registers **`/api/health`**, **`/`** HTML, runs `app.run`. |
+| `docker/src/server.py` | Connexion **Flask** entrypoint: loads `predict.yml`, **`/api/health`**, runs `app.run`. |
 | `docker/src/predict.yml` | OpenAPI 2 spec: **`GET /api/purchase`** (`customer_id`, `product_id`) and schemas; Swagger UI path is Connexion’s default (e.g. `/ui/`). |
 | `docker/src/predict.py` | Loads **`serve_bundle.pkl`**, calls **`predict_purchase_for_pair`** from `purchase_prediction`, returns JSON (incl. **cold_start_user**). |
-| `docker/src/encode.py` | Small helpers (e.g. parse customer id); API path uses bundle + `purchase_prediction` mainly. |
 | `docker/model/serve_bundle.pkl` | **Exported winner** (tabular model + meta + extras) for inference—produced by `evaluate_models.py`. |
-| `docker/model/recsys_meta.pkl`, `docker/model/model_card.json` | Metadata / card copied with the bundle for traceability. |
+| `docker/model/interaction_meta.pkl`, `docker/model/model_card.json` | Metadata / card copied with the bundle for traceability. |
 
 **Training / export (feeds Task C artifact):**
 

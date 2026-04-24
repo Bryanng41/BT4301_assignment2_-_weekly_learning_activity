@@ -8,11 +8,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from clf_modeling import build_inference_rows_for_user, get_X_only
+from clf_modeling import ClfKind, build_inference_rows_for_user, get_X_only
 
 TABULAR_KINDS = frozenset({"log_reg", "rf", "xgb", "lgbm"})
 
-EXPERIMENT_KIND: dict[str, str] = {
+EXPERIMENT_KIND: dict[str, ClfKind] = {
     "Assignment2 - Baseline Model": "log_reg",
     "Assignment2 - Alternative Model 1": "rf",
     "Assignment2 - Alternative Model 2": "xgb",
@@ -32,14 +32,11 @@ def predict_purchase_for_pair(
 ) -> dict[str, Any]:
     """
     Return purchase prediction for one (customer_id, product_id) pair: P(purchase) and threshold.
-
-    Unknown product: raises ValueError. Tabular models always return a score (cold-start users
-    use default demographic features in the row).
     """
     pii = meta["product_id_to_idx"]
     pid = int(product_id)
     if pid not in pii:
-        raise ValueError(f"Unknown product_id: {product_id}")
+        raise ValueError(f"unknown product_id {pid}")
     j = int(pii[pid])
     name = str(meta.get("product_id_to_name", {}).get(str(pid), str(pid)))
     base = {
@@ -50,9 +47,9 @@ def predict_purchase_for_pair(
     }
 
     if kind not in TABULAR_KINDS:
-        raise ValueError(f"Unsupported kind for pair purchase: {kind}")
+        raise ValueError(f"unsupported kind {kind!r}")
     if clf_extras is None:
-        raise ValueError("clf_extras required for tabular model")
+        raise ValueError("missing clf_extras")
 
     rows = build_inference_rows_for_user(
         int(customer_id),
@@ -72,9 +69,4 @@ def predict_purchase_for_pair(
         "threshold": th,
         "predicted_purchase": proba >= th,
         "cold_start_user": cold,
-        "message": (
-            "Customer not in training index; scored with default demographics like cold-start."
-            if cold
-            else None
-        ),
     }

@@ -492,7 +492,7 @@ curl "http://172.17.0.1:5001/api/predict?customer_id=11000&top_k=5"
 cd /root/assignment2/docker && docker compose down
 ```
 
-**Key paths:** `assignment2/docker/model/serve_bundle.pkl`, `recsys_meta.pkl`, `model_card.json`; OpenAPI `assignment2/docker/src/predict.yml`; `assignment2/src/recsys_lib.py` is copied into the image at build time.
+**Key paths:** `assignment2/docker/model/serve_bundle.pkl`, `interaction_meta.pkl`, `model_card.json`; OpenAPI `assignment2/docker/src/predict.yml`; `assignment2/src/purchase_prediction.py` is copied into the image at build time.
 
 ## Streamlit monitoring app
 
